@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stddef.h>
+#define BUFFER_SIZE 1024
 
 /**
  * struct fmt - function to check for formats
@@ -32,4 +34,9 @@ int _strlen(char *s);
 int _bin(va_list bin);
 int _putchar(char c);
 
+char *_rev(va_list args);
+char *_memcpy(char *dest, char *src, unsigned int n, unsigned int buffer);
+int memalloc(char *buff, int len2, char *buffer_2, int len1, double *total);
+char *cs(char c);
+char *(*get_ops(char omar))(va_list);
 #endif

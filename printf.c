@@ -1,75 +1,82 @@
 #include "main.h"
 
 /**
- * print_op - function to check which specifier to print
- * @format: string being passed
- * @print_arr: array of struct ops
- * @list: list of arguments to print
- * Return: numb of char to be printed
+ * cs -
+ *
  */
 
-int print_op(const char *format, fmt_t *print_arr, va_list list)
+char *cs(char c)
 {
-	char a;
-	int count = 0, b = 0, c = 0;
+	char string[1];
+	char *p;
 
-	a = format[b];
-	while (a != '\0')
-	{
-		if (a == '%')
-		{
-			c = 0;
-			b++;
-			a = format[b];
-			while (print_arr[c].type != NULL &&
-					a != *(print_arr[c].type))
-				c++;
-			if (print_arr[c].type != NULL)
-				count = count + print_arr[c].f(list);
-			else
-			{
-				if (a == '\0')
-					return (-1);
-				if (a != '%')
-					count += _putchar('%');
-				count += _putchar(a);
-			}
-		}
-		else
-			count += _putchar(a);
-		b++;
-		a = format[b];
-	}
-	return (count);
+	p = string;
+	string[0] = c;
+	return (p);
 }
 
 /**
- * _printf - prints output according to format
- * @format: string being passed
- * Return: char to be printed
+ * none -
+ */
+
+char *none(char c)
+{
+	char string[3];
+	char *p;
+
+	p = string;
+	string[0] = '%';
+	string[1] = c;
+	    string[2] = '\0';
+    return (p);
+}
+
+
+/**
+ * _printf - custom printf function
+ * @format: format string
+ * Return: number of characters printed (excluding null byte)
  */
 
 int _printf(const char *format, ...)
 {
-	va_list list;
-	int a = 0;
-
-	fmt_t ops[] = {
-		{"c", ch},
-		{"d", _int},
-		{"b", _bin},
-		{"i", _int},
-		{"u", _ui},
-		{"x", _hex_l},
-		{"X", _hex_u},
-		{"R", _rot13},
-		{NULL, NULL}
-	};
+	int a, len1, len2;
+	double buffer;
+	double *total;
+	va_list argpt;
+	char buffer_2[BUFFER_SIZE], *buff;
+	char *(*get_op_pt)(va_list);
 
 	if (format == NULL)
 		return (-1);
-	va_start(list, format);
-	a = print_op(format, ops, list);
-	va_end(list);
-	return (a);
-}
+	for (a = 0; a < BUFFER_SIZE; a++)
+	{
+		buffer_2[a] = 0;
+	}
+	buffer = 0;
+	get_op_pt = NULL;
+	total = &buffer;
+
+	va_start(argpt, format);
+	for (a =  len1 = len2 = 0; format && format[a]; a++)
+	{
+		if (format[a] == '%')
+		{
+			get_op_pt = get_ops(format[a + 1]);
+			buff = (get_op_pt == NULL) ? none(format[a + 1]) :
+				get_op_pt(argpt);
+
+			len2 = _strlen(buff);
+			len1 = memalloc(buff, len2, buffer_2, len1, total);
+			a++;
+		}
+		else
+		{
+			buff = cs(format[a]);
+			len1 = memalloc(buff, 1, buffer_2, len1, total);
+		}
+	}
+	va_end(argpt);
+	_putchar(buffer_2, len1);
+	return (buffer + len1);
+

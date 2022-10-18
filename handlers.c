@@ -41,12 +41,12 @@ unsigned char handle_flags(const char *flag, char *index)
 					ret |= flags[j].value;
 				break;
 			}
-			if (flags[j].value == 0)
-				break;
 		}
-
-		return (ret);
+		if (flags[j].value == 0)
+			break;
 	}
+
+	return (ret);
 }
 
 /**
